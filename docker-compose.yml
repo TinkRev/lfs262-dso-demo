@@ -1,0 +1,38 @@
+x-default-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "5m"
+    max-file: "2"
+    tag: "{{.Name}}"
+
+services:
+  jenkins:
+    image: ${JENKINS_IMAGE}
+    container_name: ${JENKINS_CONTAINER_NAME}
+    privileged
+    restart: always
+    ports:
+      - "${JENKINS_PORT}:${JENKINS_PORT}"
+      - "${JENKINS_AGENT_PORT}:${JENKINS_AGENT_PORT}"
+    healthcheck:
+      test: curl -fs http://localhost:4300/actuator/health | grep -E '"status":"UP"'
+      start_period: 10s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - devsecops
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+      - JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    profiles:
+      - cicdtool
+
+volumes:
+  jenkins_home: {}
+
+networks:
+  devsecops:
+    driver: bridge

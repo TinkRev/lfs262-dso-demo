@@ -1,21 +1,16 @@
 pipeline {
-  agent none
-
-  environment {
-        // 指定 Maven Docker 映像
-        MAVEN_DOCKER_IMAGE = 'maven:alpine'
+  agent {
+    docker {
+        image 'maven:alpine'
     }
+  }
 
   stages {
     stage('Build') {
       parallel {
         stage('Compile') {
           steps {
-            script {
-              docker.image(MAVEN_DOCKER_IMAGE).inside {
-                sh 'mvn compile'
-              }
-            }
+            sh 'mvn compile'
           }
         }
       }
@@ -24,12 +19,7 @@ pipeline {
       parallel {
         stage('Unit Tests') {
           steps {
-            script {
-              docker.image(MAVEN_DOCKER_IMAGE).inside {
-                sh 'mvn test'
-              }
-            }
-            
+            sh 'mvn test'
           }
         }
       }
@@ -38,11 +28,7 @@ pipeline {
       parallel {
         stage('Create Jarfile') {
           steps {
-            script {
-              docker.image(MAVEN_DOCKER_IMAGE).inside {
-                sh 'mvn package -DskipTests'
-              }
-            }
+            sh 'mvn package -DskipTests'
           }
         }
       }

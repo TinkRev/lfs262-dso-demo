@@ -8,9 +8,7 @@ pipeline {
             docker { image 'maven:alpine'}
           }
           steps {
-            container('maven') {
-              sh 'mvn compile'
-            }
+            sh 'mvn compile'
           }
         }
       }

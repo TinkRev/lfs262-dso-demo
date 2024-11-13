@@ -1,5 +1,10 @@
 pipeline {
-  agent none
+  agent {
+      docker { 
+        name 'maven'
+        image 'maven:alpine' 
+      }
+  }
   stages {
     stage('Build') {
       parallel {

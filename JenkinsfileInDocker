@@ -1,14 +1,12 @@
 pipeline {
-  agent {
-      docker { 
-        image 'maven:alpine' 
-        label 'maven'
-      }
-  }
+  agent none
   stages {
     stage('Build') {
       parallel {
         stage('Compile') {
+          agent {
+            docker { image 'maven:alpine'}
+          }
           steps {
             container('maven') {
               sh 'mvn compile'
@@ -20,10 +18,11 @@ pipeline {
     stage('Test') {
       parallel {
         stage('Unit Tests') {
+          agent {
+            docker { image 'maven:alpine'}
+          }
           steps {
-            container('maven') {
-              sh 'mvn test'
-            }
+            sh 'mvn test'
           }
         }
       }
@@ -31,10 +30,11 @@ pipeline {
     stage('Package') {
       parallel {
         stage('Create Jarfile') {
+          agent {
+            docker { image 'maven:alpine'}
+          }
           steps {
-            container('maven') {
-              sh 'mvn package -DskipTests'
-            }
+            sh 'mvn package -DskipTests'
           }
         }
       }

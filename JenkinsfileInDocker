@@ -1,8 +1,8 @@
 pipeline {
   agent {
       docker { 
-        name 'maven'
         image 'maven:alpine' 
+        label 'maven'
       }
   }
   stages {

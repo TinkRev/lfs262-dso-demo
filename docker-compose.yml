@@ -6,11 +6,31 @@ x-default-logging: &logging
     tag: "{{.Name}}"
 
 services:
+  jenkins-docker:
+    image: ${JENKINS_DOCKER_IMAGE}
+    container_name: ${JENKINS_DOCKER_CONTAINER_NAME}
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "${JENKINS_DOCKER_PORT}:${JENKINS_DOCKER_PORT}"
+    networks:
+      - devsecops
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - jenkins-docker-certs:/certs
+    profiles:
+      - cicdtool
   jenkins:
     image: ${JENKINS_IMAGE}
+    build:
+      context: ./
+      dockerfile: ${JENKINS_DOCKERFILE}
     container_name: ${JENKINS_CONTAINER_NAME}
-    privileged
-    restart: always
+    privileged: true
+    user: "0:0"
+    restart: unless-stopped
     ports:
       - "${JENKINS_PORT}:${JENKINS_PORT}"
       - "${JENKINS_AGENT_PORT}:${JENKINS_AGENT_PORT}"
@@ -23,15 +43,21 @@ services:
     networks:
       - devsecops
     environment:
-      - DOCKER_TLS_CERTDIR=/certs
+      - DOCKER_HOST=tcp://${JENKINS_DOCKER_CONTAINER_NAME}:${JENKINS_DOCKER_PORT}
+      - DOCKER_TLS_VERIFY=1
+      - DOCKER_CERT_PATH=/certs/client
       - JAVA_OPTS="-Djava.util.logging.config.file=/var/jenkins_home/log.properties"
     volumes:
       - jenkins_home:/var/jenkins_home
+      - jenkins-docker-certs:/certs:ro
     profiles:
       - cicdtool
 
 volumes:
   jenkins_home: {}
+  jenkins-docker-certs: 
+    # external: true
+    # name: jenkins-docker-certs
 
 networks:
   devsecops:

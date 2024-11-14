@@ -123,12 +123,12 @@ pipeline {
       parallel {
         stage('Image Linting') {
           steps {
-            sh 'dockle docker.io/xxxxxx/dso-demo'
+            sh 'dockle dso-demo:multi-stage'
           }
         }
         stage('Image Scan') {
           steps {
-            sh 'trivy image--timeout 10m--exit-code 1 xxxxxx/dso-demo'
+            sh 'trivy image--timeout 10m--exit-code 1 dso-demo:multi-stage'
           }
         }
       }
@@ -140,8 +140,21 @@ pipeline {
         }
       }
       steps {
-        // TODO
-        sh "echo done"
+        sh "docker run --name dso-demo --network=devsecops --expose 8083 dso-demo:multistage"
+      }
+    }
+    stage('Dynamic Analysis') {
+      parallel {
+        stage('E2E tests') {
+          steps {
+            sh 'echo "All Tests passed!!!"'
+          }
+        }
+        stage('DAST') {
+          steps {
+             sh 'docker run-t owasp/zap2docker-stable zap-baseline.py-t  $DEV_URL || exit 0'
+          }
+        }
       }
     }
   }

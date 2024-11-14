@@ -52,6 +52,20 @@ services:
       - jenkins-docker-certs:/certs:ro
     profiles:
       - cicdtool
+  # docker-tools:
+  #   image: ${DOCKER_TOOLS_CONTAINER_IMAGE}
+  #   container_name: ${DOCKER_TOOLS_CONTAINER_NAME}
+  #   networks:
+  #     - devsecops
+  #   volumes:
+  #     - /var/run/docker.sock:/kaniko/.docker
+  # kaniko:
+  #   image: ${KANIKO_CONTAINER_IMAGE}
+  #   container_name: ${KANIKO_CONTAINER_NAME}
+  #   networks:
+  #     - devsecops
+  #   volumes:
+  #     - jenkins-docker-cfg:/kaniko/.docker
   dtrack-apiserver:
     image: ${DTRACK_API_IMAGE}
     container_name: ${DTRACK_API_CONTAINER_NAME}
@@ -151,6 +165,8 @@ services:
     volumes:
       - 'dependency-track:/data'
     restart: unless-stopped
+    networks:
+      - devsecops
   dtrack-frontend:
     image: ${DTRACK_FRONTEND_IMAGE}
     container_name: ${DTRACK_FRONTEND_CONTAINER_NAME}
@@ -173,11 +189,14 @@ services:
     ports:
       - "${DTRACK_FRONTEND_EXPOSE_PORT}:8080"
     restart: unless-stopped
+    networks:
+      - devsecops
 volumes:
   jenkins_home: {}
   jenkins-docker-certs: 
     # external: true
     # name: jenkins-docker-certs
+  jenkins-docker-cfg: 
   dependency-track:
 networks:
   devsecops:

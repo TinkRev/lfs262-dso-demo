@@ -4,12 +4,12 @@ pipeline {
   stages {
     stage('Build') {
       parallel {
-        agent {
-          docker {
-              image 'maven:alpine'
-          }
-        }
         stage('Compile') {
+          agent {
+            docker {
+                image 'maven:alpine'
+            }
+          }
           steps {
             sh 'mvn compile'
           }

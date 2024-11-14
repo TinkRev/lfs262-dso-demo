@@ -109,7 +109,9 @@ pipeline {
         }
         stage('OCI Image BnP'){
           steps{
-            docker.build("dso-demo:multi-stage")
+            script {
+              def app = docker.build("dso-demo:multi-stage")
+            }
           }
         }
       }

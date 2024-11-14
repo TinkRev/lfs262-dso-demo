@@ -107,9 +107,32 @@ pipeline {
             sh 'mvn package -DskipTests'
           }
         }
+        stage('OCI Image BnP'){
+          agent {
+            docker {
+                image 'gcr.io/kaniko-project/executor:latest'
+            }
+          }
+          steps{
+            sh'./run_in_docker.sh -f ./Dockerfile -c . --cache=true --destination=dso-demo:multi-stage'
+          }
+        }
       }
     }
-
+    stage('Image Analysis') {
+      parallel {
+        stage('Image Linting') {
+          steps {
+            sh 'dockle docker.io/xxxxxx/dso-demo'
+          }
+        }
+        stage('Image Scan') {
+          steps {
+            sh 'trivy image--timeout 10m--exit-code 1 xxxxxx/dso-demo'
+          }
+        }
+      }
+    }
     stage('Deploy to Dev') {
       agent {
         docker {

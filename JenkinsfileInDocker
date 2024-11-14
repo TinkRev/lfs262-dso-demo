@@ -7,7 +7,7 @@ pipeline {
         stage('Compile') {
           agent {
             docker {
-                image 'maven:alpine'
+                image 'maven:3.9.9-eclipse-temurin-17-alpine'
             }
           }
           steps {
@@ -21,7 +21,7 @@ pipeline {
         stage('SCA') {
           agent {
             docker {
-                image 'maven:alpine'
+                image 'maven:3.9.9-eclipse-temurin-17-alpine'
             }
           }
           steps {
@@ -55,7 +55,7 @@ pipeline {
         stage('Generate SBOM') {
           agent {
             docker {
-                image 'maven:alpine'
+                image 'maven:3.9.9-eclipse-temurin-17-alpine'
             }
           }
           steps {
@@ -71,7 +71,7 @@ pipeline {
         stage('Unit Tests') {
           agent {
             docker {
-                image 'maven:alpine'
+                image 'maven:3.9.9-eclipse-temurin-17-alpine'
             }
           }
           steps {
@@ -100,7 +100,7 @@ pipeline {
         stage('Create Jarfile') {
           agent {
             docker {
-                image 'maven:alpine'
+                image 'maven:3.9.9-eclipse-temurin-17-alpine'
             }
           }
           steps {
@@ -136,7 +136,7 @@ pipeline {
     stage('Deploy to Dev') {
       agent {
         docker {
-            image 'maven:alpine'
+            image 'maven:3.9.9-eclipse-temurin-17-alpine'
         }
       }
       steps {

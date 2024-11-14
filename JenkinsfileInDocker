@@ -108,13 +108,8 @@ pipeline {
           }
         }
         stage('OCI Image BnP'){
-          agent {
-            docker {
-                image 'gcr.io/kaniko-project/executor:latest'
-            }
-          }
           steps{
-            sh'./run_in_docker.sh -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=dso-demo:multi-stage'
+            app = docker.build("dso-demo:multi-stage")
           }
         }
       }

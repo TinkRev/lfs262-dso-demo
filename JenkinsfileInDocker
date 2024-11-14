@@ -31,8 +31,8 @@ pipeline {
           }
           post {
             always {
-              archiveArtifacts allowEmptyArchive: true, artifacts: 'target/dependency-check-report.html', fingerprint: true, onlyIfSuccessful: true 
-              dependencyCheckPublisher pattern: 'report.xml'
+              archiveArtifacts allowEmptyArchive: true, artifacts: 'target/dependency-check-report.html', fingerprint: true, onlyIfSuccessful: true, synchronous: true
+              // dependencyCheckPublisher pattern: 'report.xml'
             }
           }
         }
@@ -77,6 +77,21 @@ pipeline {
           steps {
             sh 'mvn test'
           }
+        }
+      }
+    }
+    stage('SAST') {
+      agent {
+        docker {
+            image 'shiftleft/sast-scan:v2.1.2'
+        }
+      }
+      steps {
+        sh 'scan--type java,depscan--build'
+      }
+      post {
+        success {
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/*', fingerprint: true, onlyIfSuccessful: true
         }
       }
     }

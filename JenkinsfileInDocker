@@ -87,7 +87,7 @@ pipeline {
         }
       }
       steps {
-        sh 'scan--type java,depscan--build'
+        sh 'scan --type java, depscan --build'
       }
       post {
         success {
@@ -114,7 +114,7 @@ pipeline {
             }
           }
           steps{
-            sh'./run_in_docker.sh -f ./Dockerfile -c . --cache=true --destination=dso-demo:multi-stage'
+            sh'./run_in_docker.sh -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=dso-demo:multi-stage'
           }
         }
       }

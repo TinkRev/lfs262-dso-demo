@@ -38,7 +38,7 @@ pipeline {
         stage('OSS License Checker') {
           agent {
             docker {
-                image 'licensefinder'
+                image 'licensefinder/license_finder'
             }
           }
           steps {

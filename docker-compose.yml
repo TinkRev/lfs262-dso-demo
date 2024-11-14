@@ -191,6 +191,24 @@ services:
     restart: unless-stopped
     networks:
       - devsecops
+  vault:
+    image: ${VAULT_IMAGE}
+    container_name: ${VAULT_CONTAINER_NAME}
+    privileged: true
+    user: "0:0"
+    ports:
+      - "${VAULT_EXPOSE_PORT}:8200"  
+      # Change this to the following if you have reverse proxy setup
+      #- "127.0.0.1:8200:8200"
+    volumes:
+      - ./config.hcl:/vault/config/config.hcl:ro
+      - vault-data:/var/lib/vault:rw
+    cap_add:
+      - IPC_LOCK
+    command: server
+    environment:
+      - TZ=Asia/Taipei
+    restart: always
 volumes:
   jenkins_home: {}
   jenkins-docker-certs: 
@@ -198,6 +216,7 @@ volumes:
     # name: jenkins-docker-certs
   jenkins-docker-cfg: 
   dependency-track:
+  vault-data:
 networks:
   devsecops:
     driver: bridge

@@ -116,7 +116,7 @@ pipeline {
           }
           steps{
             script {
-              def app = docker.build("dso-demo:multi-stage")
+              def app = docker.build("rhythmsyu/dso-demo:multi-stage")
               app.push()
             }
           }
@@ -142,7 +142,7 @@ pipeline {
             }
           }
           steps {
-            sh 'trivy image --timeout 10m --exit-code 1 dso-demo:multi-stage'
+            sh 'trivy image --timeout 10m --exit-code 1 rhythmsyu/dso-demo:multi-stage'
           }
         }
       }
@@ -154,7 +154,7 @@ pipeline {
         }
       }
       steps {
-        sh "docker run --name dso-demo --network=devsecops --expose 8083 dso-demo:multistage"
+        sh "docker run --name dso-demo --network=devsecops --expose 8083 rhythmsyu/dso-demo:multi-stage"
       }
     }
     stage('Dynamic Analysis') {

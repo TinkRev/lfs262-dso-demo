@@ -132,7 +132,7 @@ pipeline {
             }
           }
           steps {
-            sh 'dockle dso-demo:multi-stage'
+            sh 'dockle rhythmsyu/dso-demo:multi-stage'
           }
         }
         stage('Image Scan') {

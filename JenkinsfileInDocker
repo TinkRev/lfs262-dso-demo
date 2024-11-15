@@ -131,7 +131,11 @@ pipeline {
             }
           }
           steps {
-            sh 'dockle dso-demo:multi-stage'
+            script {
+              app.inside {
+                sh 'dockle dso-demo:multi-stage'
+              }           
+            }
           }
         }
         stage('Image Scan') {
@@ -141,7 +145,11 @@ pipeline {
             }
           }
           steps {
-            sh 'trivy image--timeout 10m--exit-code 1 dso-demo:multi-stage'
+            script {
+              app.inside {
+                sh 'trivy image --timeout 10m--exit-code 1 dso-demo:multi-stage'
+              }           
+            }
           }
         }
       }

@@ -108,6 +108,11 @@ pipeline {
           }
         }
         stage('OCI Image BnP'){
+          agent {
+            docker {
+                image 'docker:dind'
+            }
+          }
           steps{
             script {
               def app = docker.build("dso-demo:multi-stage")

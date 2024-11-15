@@ -125,11 +125,21 @@ pipeline {
     stage('Image Analysis') {
       parallel {
         stage('Image Linting') {
+          agent {
+            docker {
+                image 'rmkanda/docker-tools:latest'
+            }
+          }
           steps {
             sh 'dockle dso-demo:multi-stage'
           }
         }
         stage('Image Scan') {
+          agent {
+            docker {
+                image 'rmkanda/docker-tools:latest'
+            }
+          }
           steps {
             sh 'trivy image--timeout 10m--exit-code 1 dso-demo:multi-stage'
           }

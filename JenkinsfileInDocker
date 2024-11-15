@@ -1,6 +1,8 @@
 pipeline {
   agent none
-
+  environment {
+      def app
+    }
   stages {
     stage('Build') {
       parallel {
@@ -116,7 +118,7 @@ pipeline {
           }
           steps{
             script {
-              def app = docker.build("dso-demo:multi-stage")
+              app = docker.build("dso-demo:multi-stage")
             }
           }
         }

@@ -1,8 +1,6 @@
 pipeline {
   agent none
-  environment {
-      def app
-    }
+  
   stages {
     stage('Build') {
       parallel {
@@ -118,7 +116,8 @@ pipeline {
           }
           steps{
             script {
-              app = docker.build("dso-demo:multi-stage")
+              def app = docker.build("dso-demo:multi-stage")
+              app.push()
             }
           }
         }
@@ -133,11 +132,7 @@ pipeline {
             }
           }
           steps {
-            script {
-              app.inside {
-                sh 'dockle dso-demo:multi-stage'
-              }           
-            }
+            sh 'dockle dso-demo:multi-stage'
           }
         }
         stage('Image Scan') {
@@ -147,11 +142,7 @@ pipeline {
             }
           }
           steps {
-            script {
-              app.inside {
-                sh 'trivy image --timeout 10m--exit-code 1 dso-demo:multi-stage'
-              }           
-            }
+            sh 'trivy image --timeout 10m --exit-code 1 dso-demo:multi-stage'
           }
         }
       }

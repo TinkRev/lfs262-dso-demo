@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: app
-      image: docker.io/rhythmsyu/dso-demo:latest
+      image: sample-app:latest
       resources:
         requests:
           memory: "64Mi"

@@ -6,6 +6,10 @@ pipeline {
       idleMinutes 1
     }
   }
+  parameters {
+      string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
+      booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests during packaging')
+  }
   stages {
     stage('Build') {
       parallel {
@@ -34,20 +38,28 @@ pipeline {
         stage('Create Jarfile') {
           steps {
             container('maven') {
-              sh 'mvn package -DskipTests'
+              sh "mvn package ${params.SKIP_TESTS ? '-DskipTests' : ''}"
             }
           }
         }
         stage("Build with Kaniko") {
           steps {
             container('kaniko') {
-              sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --force --destination=docker.io/rhythmsyu/dso-demo:latest'
+              sh """
+                /kaniko/executor \
+                  -f `pwd`/Dockerfile \
+                  -c `pwd` \
+                  --insecure \
+                  --skip-tls-verify \
+                  --cache=true \
+                  --force \
+                  --destination=docker.io/rhythmsyu/dso-demo:${params.IMAGE_TAG}
+              """
             }
           }
         }
       }
     }
-
     stage('Deploy to Dev') {
       steps {
         // TODO

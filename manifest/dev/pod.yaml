@@ -8,6 +8,7 @@ spec:
   containers:
     - name: app
       image: docker.io/rhythmsyu/dso-demo
+      imagePullPolicy: Always
       resources:
         requests:
           memory: "64Mi"

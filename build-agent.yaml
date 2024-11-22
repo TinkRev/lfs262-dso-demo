@@ -46,7 +46,10 @@ spec:
     - name: argocd-cli
       image: bitnami/argo-cd:2.13.1
       command:
-        - cat
+        - sh
+      args:
+        - -c
+        - while true; do sleep 30; done
       tty: true
   volumes:
     - name: m2

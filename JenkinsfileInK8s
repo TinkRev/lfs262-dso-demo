@@ -67,7 +67,6 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'argocd-dev-sync', variable: 'AUTH_TOKEN')]) {
           container('argocd-cli') {
-            sh "ls -la /home/jenkins/agent/workspace"
             sh "argocd app sync ${ARGO_APPLICATION_NAME} --insecure --server ${ARGO_SERVER} --auth-token ${AUTH_TOKEN} --grpc-web"
             sh "argocd app wait ${ARGO_APPLICATION_NAME} --health --timeout 300 --insecure --server ${ARGO_SERVER} --auth-token ${AUTH_TOKEN} --grpc-web"
           }

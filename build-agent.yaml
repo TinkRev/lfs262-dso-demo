@@ -43,6 +43,9 @@ spec:
       volumeMounts:
         - name: jenkins-docker-cfg
           mountPath: /kaniko/.docker
+    - name: argocd
+      image: bitnami/argo-cd:2.10.7
+      tty: true
   volumes:
     - name: m2
       hostPath:

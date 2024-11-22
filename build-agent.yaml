@@ -45,6 +45,8 @@ spec:
           mountPath: /kaniko/.docker
     - name: argocd
       image: bitnami/argo-cd:2.10.7
+      command:
+        - sleep
       tty: true
   volumes:
     - name: m2

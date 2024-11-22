@@ -51,6 +51,9 @@ spec:
         - -c
         - while true; do sleep 30; done
       tty: true
+      volumeMounts:
+        - name: workspace
+          mountPath: /home/jenkins/agent/workspace
   volumes:
     - name: m2
       hostPath:
@@ -69,3 +72,5 @@ spec:
             items:
               - key: .dockerconfigjson
                 path: config.json
+    - name: workspace
+      emptyDir: {}

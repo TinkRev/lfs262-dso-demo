@@ -43,8 +43,8 @@ spec:
       volumeMounts:
         - name: jenkins-docker-cfg
           mountPath: /kaniko/.docker
-    - name: argocd
-      image: bitnami/argo-cd:2.10.7
+    - name: argocd-cli
+      image: bitnami/argo-cd:2.13.1
       command:
         - sleep
       args:

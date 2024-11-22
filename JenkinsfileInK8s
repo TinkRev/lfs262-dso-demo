@@ -7,8 +7,11 @@ pipeline {
     }
   }
   parameters {
-      string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
-      booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests during packaging')
+    string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
+    booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests during packaging')
+  }
+  environment {
+    ARGO_SERVER = 'argo-dev.prlab.io'
   }
   stages {
     stage('Build') {
@@ -61,9 +64,12 @@ pipeline {
       }
     }
     stage('Deploy to Dev') {
+       environment {
+         AUTH_TOKEN = credentials('argocd-dev-sync')
+       }
       steps {
-        // TODO
-        sh "echo done"
+        sh 'docker run-t schoolofdevops/argocd-cli argocd app sync dso-demo-ssc --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
+        sh 'docker run-t schoolofdevops/argocd-cli argocd app wait dso-demo-ssc --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
       }
     }
   }

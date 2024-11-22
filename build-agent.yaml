@@ -47,6 +47,8 @@ spec:
       image: bitnami/argo-cd:2.10.7
       command:
         - sleep
+      args:
+        - 99d
       tty: true
   volumes:
     - name: m2

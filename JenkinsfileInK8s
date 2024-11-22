@@ -7,11 +7,11 @@ pipeline {
     }
   }
   parameters {
+    string(name: 'IMAGE_NAME', defaultValue: 'dso-demo', description: 'Docker Image Name')
     string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
     booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Skip tests during packaging')
-  }
-  environment {
-    ARGO_SERVER = 'argo-dev.prlab.io'
+    string(name: 'ARGO_SERVER', defaultValue: 'argo-dev.prlab.io', description: 'argo server')
+    string(name: 'ARGO_APPLICATION_NAME', defaultValue: 'dso-demo-dev-ssc', description: 'argo application in server')
   }
   stages {
     stage('Build') {
@@ -56,7 +56,7 @@ pipeline {
                   --skip-tls-verify \
                   --cache=true \
                   --force \
-                  --destination=docker.io/rhythmsyu/dso-demo:${params.IMAGE_TAG}
+                  --destination=docker.io/rhythmsyu/${params.IMAGE_NAME}:${params.IMAGE_TAG}
               """
             }
           }
@@ -68,9 +68,9 @@ pipeline {
         AUTH_TOKEN = credentials('argocd-dev-sync')
       }
       steps {
-        container('docker-tools') {
-          sh 'docker run -t bitnami/argo-cd argocd app sync dso-demo-ssc --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
-          sh 'docker run -t bitnami/argo-cd argocd app wait dso-demo-ssc --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
+        container('argocd-cli') {
+          sh 'argocd app sync ${params.ARGO_APPLICATION_NAME} --insecure --server ${params.ARGO_SERVER} --auth-token $AUTH_TOKEN --grpc-web'
+          sh 'argocd app wait ${params.ARGO_APPLICATION_NAME} --health --timeout 300 --insecure --server ${params.ARGO_SERVER} --auth-token $AUTH_TOKEN --grpc-web'
         }
       }
     }

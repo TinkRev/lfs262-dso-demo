@@ -64,13 +64,13 @@ pipeline {
       }
     }
     stage('Deploy to Dev') {
-       environment {
-         AUTH_TOKEN = credentials('argocd-dev-sync')
-       }
+      environment {
+        AUTH_TOKEN = credentials('argocd-dev-sync')
+      }
       steps {
-        container('argocd') {
-          sh 'argocd app sync dso-demo-ssc --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
-          sh 'argocd app wait dso-demo-ssc --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
+        container('docker-tools') {
+          sh 'docker run -t bitnami/argo-cd argocd app sync dso-demo-ssc --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
+          sh 'docker run -t bitnami/argo-cd argocd app wait dso-demo-ssc --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN --grpc-web'
         }
       }
     }

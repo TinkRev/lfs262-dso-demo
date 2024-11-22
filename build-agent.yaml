@@ -45,6 +45,9 @@ spec:
           mountPath: /kaniko/.docker
     - name: argocd-cli
       image: bitnami/argo-cd:2.13.1
+      securityContext:
+        runAsUser: 1000  # Jenkins 用戶 UID
+        runAsGroup: 1000 # Jenkins 用戶 GID
       command:
         - sh
       args:

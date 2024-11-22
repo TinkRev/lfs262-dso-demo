@@ -64,13 +64,12 @@ pipeline {
       }
     }
     stage('Deploy to Dev') {
-      environment {
-        AUTH_TOKEN = credentials('argocd-dev-sync')
-      }
-      steps {
+      withCredentials([string(credentialsId: 'argocd-dev-sync', variable: 'AUTH_TOKEN')]) {
         container('argocd-cli') {
-          sh ("argocd app sync ${params.ARGO_APPLICATION_NAME} --insecure --server ${params.ARGO_SERVER} --auth-token $AUTH_TOKEN --grpc-web")
-          sh ("argocd app wait ${params.ARGO_APPLICATION_NAME} --health --timeout 300 --insecure --server ${params.ARGO_SERVER} --auth-token $AUTH_TOKEN --grpc-web")
+            sh '''
+                argocd app sync ${ARGO_APPLICATION_NAME} --insecure --server ${ARGO_SERVER} --auth-token ${AUTH_TOKEN} --grpc-web
+                argocd app wait ${ARGO_APPLICATION_NAME} --health --timeout 300 --insecure --server ${ARGO_SERVER} --auth-token ${AUTH_TOKEN} --grpc-web
+            '''
         }
       }
     }

@@ -72,16 +72,18 @@ pipeline {
       steps {
         container('git') {
           script {
+            // Checkout the repository
+            git credentialsId: 'ssc-github', 
+                url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
+                branch: 'main'
+
+            // Update the K8S manifest and push the changes
             withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh '''
-                // Checkout the repository
-                git credentialsId: 'ssc-github', 
-                    url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
-                    branch: 'main'
-
-                // Update the K8S manifest and push the changes
+               
                 git config user.email "${GIT_USER_EMAIL}"
                 git config user.name "${GIT_USER_NAME}"
+                git branch --set-upstream-to=origin/main main
 
                 cat ./dso-demo/dev/manifest/pod.yaml
                 sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml

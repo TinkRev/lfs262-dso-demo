@@ -81,7 +81,7 @@ pipeline {
               withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                   sh '''
                   cat ./dso-demo/dev/manifest/pod.yaml
-                  sed -i "s|newTag:.*|newTag: \'${IMAGE_TAG}\'|" ./dso-demo/dev/manifest/pod.yaml
+                  sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:\'${IMAGE_TAG}\'|" ./dso-demo/dev/manifest/pod.yaml
                   cat ./dso-demo/dev/manifest/pod.yaml
                   git add ./dso-demo/dev/manifest/pod.yaml
                   git commit -m 'Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline'

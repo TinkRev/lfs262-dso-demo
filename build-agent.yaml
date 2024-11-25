@@ -54,6 +54,12 @@ spec:
         - -c
         - while true; do sleep 30; done
       tty: true
+    - name: git
+      image: alpine/git:v2.45.2
+      command:
+        - sleep
+      args:
+        - 99d
   volumes:
     - name: m2
       hostPath:

@@ -95,7 +95,7 @@ pipeline {
   
                   git add ./dso-demo/dev/manifest/pod.yaml
                   git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
-                  git remote set-url origin https://github.com/TinkRev/argocd-app-k8s-manifest.git
+                  git remote set-url origin https://${encodedUsername}:${encodedPassword}@github.com/TinkRev/argocd-app-k8s-manifest.git
                   git push -u origin main
                 '''
               }

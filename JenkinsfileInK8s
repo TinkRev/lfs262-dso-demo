@@ -73,14 +73,13 @@ pipeline {
         container('argocd-cli') {
           script {
             
-            
             withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               script {
                 def encodedUsername = URLEncoder.encode(GIT_USERNAME, "UTF-8")
                 def encodedPassword = URLEncoder.encode(GIT_PASSWORD, "UTF-8")
                 sh '''
                   // Checkout the repository
-                  git clone https://git.prlab.io/toyota/reinsuranceargo.git
+                  git clone https://github.com/TinkRev/argocd-app-k8s-manifest.git
                   // Update the K8S manifest and push the changes
                   git config user.email "${GIT_USER_EMAIL}"
                   git config user.name "${GIT_USERNAME}"

@@ -70,34 +70,28 @@ pipeline {
     }
     stage('Update K8S manifest & push to Repo') {
       steps {
-        container('argocd-cli') {
-          script {
+        container('git') {
             // Checkout the repository
             git credentialsId: 'ssc-github', 
-                url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
+                url: 'git@github.com/TinkRev/argocd-app-k8s-manifest.git',
                 branch: 'main'
 
             // Update the K8S manifest and push the changes
-            withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                def encodedUsername = URLEncoder.encode(GIT_USERNAME, "UTF-8")
-                def encodedPassword = URLEncoder.encode(GIT_PASSWORD, "UTF-8")
-                sh """
-                  git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"
-                  git config user.email "${GIT_USER_EMAIL}"
-                  git config user.name "${GIT_USERNAME}"
-                  
+            sh """
+                git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"
+                git config user.email "${GIT_USER_EMAIL}"
+                git config user.name "${GIT_USERNAME}"
+                
   
-                  cat ./dso-demo/dev/manifest/pod.yaml
-                  sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml
-                  cat ./dso-demo/dev/manifest/pod.yaml
+                cat ./dso-demo/dev/manifest/pod.yaml
+                sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml
+                cat ./dso-demo/dev/manifest/pod.yaml
   
-                  git add ./dso-demo/dev/manifest/pod.yaml
-                  git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
-                  git remote -v
-                  git push -u origin main
-                """
-            }
-          }
+                git add ./dso-demo/dev/manifest/pod.yaml
+                git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
+                git remote -v
+                git push -u origin main
+              """
         }
       }
     }

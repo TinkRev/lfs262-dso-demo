@@ -68,33 +68,33 @@ pipeline {
         }
       }
     }
-    stage('Checkout K8S manifest SCM'){
+    stage('Update K8S manifest & push to Repo') {
       steps {
-        container('git') {
-          git credentialsId: 'ssc-github', 
-          url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
-          branch: 'main'
-        }
-      }
-    }
-    stage('Update K8S manifest & push to Repo'){
-        steps {
           container('git') {
-            script{
-              withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                  sh '''
-                  git config user.email "${GIT_USER_EMAIL}"
-                  cat ./dso-demo/dev/manifest/pod.yaml
-                  sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml
-                  cat ./dso-demo/dev/manifest/pod.yaml
-                  git add ./dso-demo/dev/manifest/pod.yaml
-                  git commit -m 'Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline'
-                  git remote -v
-                  git push https://github.com/TinkRev/argocd-app-k8s-manifest.git HEAD:main
-                  '''                        
+              script {
+                  // Checkout the repository
+                  git credentialsId: 'ssc-github', 
+                      url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
+                      branch: 'main'
+  
+                  // Update the K8S manifest and push the changes
+                  withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                      sh '''
+                        git config user.email "${GIT_USER_EMAIL}"
+                        git config user.name "${GIT_USERNAME}"
+    
+                        cat ./dso-demo/dev/manifest/pod.yaml
+                        sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml
+                        cat ./dso-demo/dev/manifest/pod.yaml
+    
+                        git add ./dso-demo/dev/manifest/pod.yaml
+                        git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
+                        git remote -v
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/TinkRev/argocd-app-k8s-manifest.git HEAD:main
+                      '''
+                  }
               }
           }
-        }
       }
     }
     stage('Deploy to Dev') {

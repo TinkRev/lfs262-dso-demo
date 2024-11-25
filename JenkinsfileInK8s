@@ -70,6 +70,7 @@ pipeline {
     }
     stage('Update K8S manifest & push to Repo') {
       steps {
+        container('argocd-cli') {
           script {
             // Checkout the repository
             git credentialsId: 'ssc-github', 
@@ -82,9 +83,9 @@ pipeline {
                 def encodedUsername = URLEncoder.encode(GIT_USERNAME, "UTF-8")
                 def encodedPassword = URLEncoder.encode(GIT_PASSWORD, "UTF-8")
                 sh '''
-                 
+                  git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"
                   git config user.email "${GIT_USER_EMAIL}"
-                  git config user.name "${GIT_USER_NAME}"
+                  git config user.name "${GIT_USERNAME}"
                   git remote -v
                   
   
@@ -99,6 +100,7 @@ pipeline {
               }
             }
           }
+        }
       }
     }
     stage('Deploy to Dev') {

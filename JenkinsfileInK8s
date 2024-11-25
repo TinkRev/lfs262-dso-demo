@@ -90,7 +90,7 @@ pipeline {
                         git add ./dso-demo/dev/manifest/pod.yaml
                         git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
                         git remote -v
-                        git push https://${GIT_USER_NAME}:${GIT_PASSWORD}@github.com/TinkRev/argocd-app-k8s-manifest.git HEAD:main
+                        git push
                       '''
                   }
               }

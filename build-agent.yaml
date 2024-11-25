@@ -56,6 +56,9 @@ spec:
       tty: true
     - name: git
       image: alpine/git:v2.45.2
+      securityContext:
+        runAsUser: 1000  # Jenkins 用戶 UID
+        runAsGroup: 1000 # Jenkins 用戶 GID
       command:
         - sleep
       args:

@@ -14,6 +14,8 @@ pipeline {
   }
   environment {
     IMAGE_TAG = "${BUILD_NUMBER}"
+    GIT_USER_NAME = credentials('dso-demo-manifest-github-username')
+    GIT_USER_EMAIL = credentials('dso-demo-manifest-github-email')
   }
   stages {
     stage('Build') {
@@ -80,6 +82,8 @@ pipeline {
             script{
               withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                   sh '''
+                  git config user.email "$GIT_USER_EMAIL"
+                  git config user.name "$GIT_USER_NAME"
                   cat ./dso-demo/dev/manifest/pod.yaml
                   sed -i "s|docker.io/rhythmsyu/dso-demo:.*|docker.io/rhythmsyu/dso-demo:${IMAGE_TAG}|" ./dso-demo/dev/manifest/pod.yaml
                   cat ./dso-demo/dev/manifest/pod.yaml

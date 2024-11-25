@@ -73,7 +73,7 @@ pipeline {
         container('git') {
             // Checkout the repository
             git credentialsId: 'ssc-github', 
-                url: 'git@github.com/TinkRev/argocd-app-k8s-manifest.git',
+                url: 'https://github.com/TinkRev/argocd-app-k8s-manifest.git',
                 branch: 'main'
 
             // Update the K8S manifest and push the changes

@@ -14,7 +14,6 @@ pipeline {
   }
   environment {
     IMAGE_TAG = "${BUILD_NUMBER}"
-    GIT_USER_NAME = credentials('dso-demo-manifest-github-username')
     GIT_USER_EMAIL = credentials('dso-demo-manifest-github-email')
   }
   stages {
@@ -79,6 +78,7 @@ pipeline {
               
               def encodedUsername = URLEncoder.encode(GIT_USERNAME, "UTF-8")
               def encodedPassword = URLEncoder.encode(GIT_PASSWORD, "UTF-8")
+
               // Update the K8S manifest and push the changes
               sh """
                   

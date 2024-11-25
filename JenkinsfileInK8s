@@ -74,7 +74,6 @@ pipeline {
           script {
             
             withCredentials([usernamePassword(credentialsId: 'ssc-github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-              script {
                 def encodedUsername = URLEncoder.encode(GIT_USERNAME, "UTF-8")
                 def encodedPassword = URLEncoder.encode(GIT_PASSWORD, "UTF-8")
                 sh '''
@@ -93,7 +92,6 @@ pipeline {
                   git commit -m "Updated the ./dso-demo/dev/manifest/pod.yaml | Jenkins Pipeline"
                   git push -u origin main
                 '''
-              }
             }
           }
         }

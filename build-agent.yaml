@@ -63,6 +63,12 @@ spec:
         - sleep
       args:
         - 99d
+    - name: slscan
+      image: shiftleft/sast-scan:v2.1.2
+      imagePullPolicy: Always
+      command:
+        - cat
+      tty: true
   volumes:
     - name: m2
       hostPath:

@@ -29,12 +29,10 @@ spec:
         - cat
       tty: true
     - name: licensefinder
-      image: licensefinder/license_finder:7.1.0
+      image: licensefinder/license_finder:7.2.1
       command:
-        - sh
-      args:
-        - -c
-        - while true; do sleep 30; done
+        - cat
+      tty: true
     - name: kaniko
       image: gcr.io/kaniko-project/executor:v1.23.2-debug
       imagePullPolicy: Always

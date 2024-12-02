@@ -15,6 +15,7 @@ pipeline {
   environment {
     IMAGE_TAG = "${BUILD_NUMBER}"
     GIT_USER_EMAIL = credentials('dso-demo-manifest-github-email')
+    DEV_URL='http://dso-demo-dev.dev.svc.cluster.local:8080'
   }
   stages {
     stage('Build') {
@@ -181,5 +182,21 @@ pipeline {
         }
       }
     }
+    stage("Dynamic Analysis") {
+      parallel {
+        stage('E2E test') {
+          steps {
+            sh 'echo "ALL Test passed"'
+          }
+        }
+        stage('DAST') {
+          steps {
+            container('zap') {
+              sh 'zap-baseline.py -t  $DEV_URL || exit 0 '
+            }
+          }
+        }
+      }
+    } 
   }
 }

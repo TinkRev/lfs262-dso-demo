@@ -119,6 +119,24 @@ pipeline {
         }
       }
     }
+    stage('Image Analysis') {
+      parallel {
+        stage('Image Linting') {
+          steps {
+            container('docker-tools') {
+              sh 'dockle docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}'
+            }
+          }
+        }
+        stage('Image Scan') {
+          steps {
+            container('docker-tools') {
+              sh 'trivy image --timeout 10m --exit-code 1 docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}'
+            }
+          }
+        }
+      }
+    }
     stage('Update K8S manifest & push to Repo') {
       steps {
         container('git') {

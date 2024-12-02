@@ -30,6 +30,9 @@ spec:
       tty: true
     - name: licensefinder
       image: licensefinder/license_finder
+      securityContext:
+        runAsUser: 1000  # Jenkins 用戶 UID
+        runAsGroup: 1000 # Jenkins 用戶 GID
       command:
         - cat
       tty: true

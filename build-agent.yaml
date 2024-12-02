@@ -29,10 +29,7 @@ spec:
         - cat
       tty: true
     - name: licensefinder
-      image: licensefinder/license_finder
-      securityContext:
-        runAsUser: 1000  # Jenkins 用戶 UID
-        runAsGroup: 1000 # Jenkins 用戶 GID
+      image: licensefinder/license_finder:7.2.1
       command:
         - cat
       tty: true
@@ -70,6 +67,11 @@ spec:
       image: shiftleft/sast-scan:v2.1.2
       imagePullPolicy: Always
       command:
+        - cat
+      tty: true
+    - name: zap
+      image: ghcr.io/zaproxy/zaproxy:stable
+      command: 
         - cat
       tty: true
   volumes:

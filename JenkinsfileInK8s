@@ -52,12 +52,8 @@ pipeline {
               sh 'apt update'
               sh 'apt install git openjdk-17-jdk -y'
               sh 'ls -al'
-              sh '''#!/bin/bash --login
-              /bin/bash --login
-              rvm use default
-              gem install license_finder
-              license_finder
-              ''' 
+              sh 'gem install license_finder'
+              sh 'license_finder' 
             }
           }
         }

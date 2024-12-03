@@ -49,6 +49,8 @@ pipeline {
         stage('OSS License Checker') {
           steps {
             container('licensefinder') {
+              sh 'apt update'
+              sh 'apt install git openjdk-17-jdk -y'
               sh 'ls -al'
               sh '''#!/bin/bash --login
               /bin/bash --login

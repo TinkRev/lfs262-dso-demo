@@ -17,6 +17,7 @@ import java.net.*;
 import java.io.*;
 import java.nio.channels.*;
 import java.util.Properties;
+import java.nio.file.Path;
 
 public class MavenWrapperDownloader {
 
@@ -47,7 +48,8 @@ public class MavenWrapperDownloader {
 
     public static void main(String args[]) {
         System.out.println("- Downloader started");
-        File baseDirectory = new File(args[0]);
+        String arg0 = Path.of(args[0]).toAbsolutePath().normalize();
+        File baseDirectory = new File(arg0);
         System.out.println("- Using base directory: " + baseDirectory.getAbsolutePath());
 
         // If the maven-wrapper.properties exists, read it and check if it contains a custom

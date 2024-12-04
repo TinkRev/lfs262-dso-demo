@@ -65,7 +65,9 @@ spec:
         - 99d
     - name: slscan
       image: shiftleft/sast-scan:v2.1.2
-      imagePullPolicy: Always
+      env:
+        - name: SCAN_DEBUG_MODE
+          value: "true"
       command:
         - cat
       tty: true

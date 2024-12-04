@@ -67,7 +67,7 @@ spec:
       image: shiftleft/sast-scan:v2.1.2
       env:
         - name: SCAN_DEBUG_MODE
-          value: "true"
+          value: "debug"
       command:
         - cat
       tty: true

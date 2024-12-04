@@ -48,7 +48,7 @@ public class MavenWrapperDownloader {
 
     public static void main(String args[]) {
         System.out.println("- Downloader started");
-        String arg0 = Path.of(args[0]).toAbsolutePath().normalize();
+        String arg0 = Path.of(args[0]).toAbsolutePath().normalize().toString();
         File baseDirectory = new File(arg0);
         System.out.println("- Using base directory: " + baseDirectory.getAbsolutePath());
 

@@ -71,6 +71,9 @@ spec:
       command:
         - cat
       tty: true
+      volumeMounts:
+        - name: m2
+          mountPath: /root/.m2/
     - name: zap
       image: ghcr.io/zaproxy/zaproxy:stable
       command: 

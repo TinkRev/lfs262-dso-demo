@@ -16,7 +16,7 @@ pipeline {
     IMAGE_TAG = "${BUILD_NUMBER}"
     GIT_USER_EMAIL = credentials('dso-demo-manifest-github-email')
     DEV_URL='http://dso-demo-dev.dev.svc.cluster.local:8080'
-    JAVA_OPTS = "-Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=86400"
+    JAVA_OPTS = "-Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=300"
   }
   stages {
     stage('Build') {

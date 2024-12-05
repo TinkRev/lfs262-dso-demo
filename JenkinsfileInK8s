@@ -101,7 +101,7 @@ pipeline {
         }
         stage("Build with Kaniko") {
           steps {
-            container('kaniko') {
+            container(name:'kaniko', shell:'/busybox/sh') {
               sh """
                 /kaniko/executor \
                   -f `pwd`/Dockerfile \

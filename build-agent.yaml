@@ -35,7 +35,9 @@ spec:
       tty: true
     - name: kaniko
       image: gcr.io/kaniko-project/executor:v1.23.2-debug
-      imagePullPolicy: Always
+      securityContext:
+        runAsUser: 1000  # Jenkins 用戶 UID
+        runAsGroup: 1000 # Jenkins 用戶 GID
       command:
         - sleep
       args:

@@ -108,7 +108,6 @@ pipeline {
                   -c `pwd` \
                   --insecure \
                   --skip-tls-verify \
-                  --cache=true \
                   --force \
                   --destination=docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}
               """

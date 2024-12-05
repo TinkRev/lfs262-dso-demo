@@ -1,9 +1,9 @@
-FROM maven:3.8.7-openjdk-18-slim AS build
+FROM 3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . .
 RUN mvn package -DskipTests
 
-FROM eclipse-temurin:20.0.1_9-jre-alpine AS run
+FROM eclipse-temurin:17.0.13_11-jre-ubi9-minimal AS run
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /run/demo.jar
 
 ARG USER=devops

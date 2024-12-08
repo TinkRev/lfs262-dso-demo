@@ -36,6 +36,9 @@ spec:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:v1.23.2-debug
       imagePullPolicy: Always
+      securityContext:
+        capabilities:
+          add: ["CHOWN", "SETFCAP","SETGID","SETUID", "CAP_SETUID", "CAP_SETGID"]
       command:
         - sleep
       args:

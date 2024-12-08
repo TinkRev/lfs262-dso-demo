@@ -104,7 +104,7 @@ pipeline {
           steps {
             container('kaniko') {
               catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                sh "/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --force --verbosity=debug --destination=docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}"
+                sh "/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --force --verbosity=debug --destination=docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}"
               }
             }
           }

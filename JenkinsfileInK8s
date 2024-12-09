@@ -123,7 +123,7 @@ pipeline {
         stage('Image Scan') {
           steps {
             container('docker-tools') {
-              sh "trivy image --timeout 10m --exit-code 1 docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}"
+              sh "trivy image --timeout 15m --exit-code 1 docker.io/rhythmsyu/${params.IMAGE_NAME}:${IMAGE_TAG}"
             }
           }
         }

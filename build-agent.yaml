@@ -15,6 +15,7 @@ spec:
           mountPath: /root/.m2/
     - name: docker-tools
       image: rmkanda/docker-tools:latest
+      imagePullPolicy: Always
       command:
         - cat
       tty: true
